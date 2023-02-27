@@ -1,6 +1,38 @@
 # @kjn/tsc-dual-build
 
+[![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
+
+[![npm version](https://badge.fury.io/js/@kjn%2Ftsc-dual-build.svg)](https://www.npmjs.com/package/@kjn/tsc-dual-build)
+
 Helps you build ESModules and CommonJS modules with ease.
+
+# HOW-TO-USE
+
+Install script using npm
+
+```sh
+npm i @kjn/tsc-dual-build@latest
+```
+
+Execute dual-build
+
+```sh
+npx tsc-dual-build ./tsconfig.json
+```
+
+_Recommended_
+
+Update `package.json` > `scripts` > `build`
+
+```json
+"scripts": {
+  "build": "tsc-dual-build tsconfig.json"
+}
+```
+
+Now you can simply `npm run build` to execute a dual build
+
+# About
 
 Will compile the following project structure
 
