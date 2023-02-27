@@ -32,6 +32,22 @@ Update `package.json` > `scripts` > `build`
 
 Now you can simply `npm run build` to execute a dual build
 
+```sh
+> tsc-dual-build
+
+2️⃣  tsc-dual-build <tsConfigFile>
+🔨 tsc-build
+  module: "es2022"
+  outDir: "./dist/esm"
+🔨 tsc-build
+  module: "commonjs"
+  outDir: "./dist/cjs"
+⚙️ Exporting package.json
+  created "dist/esm/package.json"
+  created "dist/cjs/package.json"
+🏁 tsc-dual-build finished
+```
+
 # About
 
 Will compile the following project structure

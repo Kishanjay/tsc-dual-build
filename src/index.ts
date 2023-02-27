@@ -32,11 +32,17 @@ type DualBuildConfig = {
     outDir: string;
   };
 };
-const [, , tsConfigFile] = process.argv;
+let [, , tsConfigFile] = process.argv;
+
+console.log(`2️⃣  tsc-dual-build <tsConfigFile>`);
+
+if (!tsConfigFile) {
+  console.log(`⛑  no <tsConfigFile>\n  defaulting to "tsconfig.json"`);
+  tsConfigFile = "tsconfig.json";
+}
 assert(tsConfigFile, `Invalid tsConfig file. Usage: tsc-dual-build <tsConfigFile>`);
 
 async function tscDualBuild() {
-  console.log(`2️⃣  [tsc-dual-build] starting\n  building ESM and CJS`);
   const config = getConfig();
 
   // Build ESM
@@ -48,7 +54,7 @@ async function tscDualBuild() {
   // Add local package.jsons
   compileLocalPackageJson(config.packageJson, config.esm.outDir, config.cjs.outDir);
 
-  console.log(`🏁 [tsc-dual-build] finished`);
+  console.log(`🏁 tsc-dual-build finished`);
 }
 
 function tscBuild(moduleOverride: string, outDirOverride: string) {
@@ -91,7 +97,10 @@ function compileLocalPackageJson(packageJson: PackageJson, esmOutDir: string, cj
  * Fetches (and validates) the `tscDualBuild` config from tsconfig.json
  */
 function getConfig() {
-  const fileContents = fs.readFileSync(path.join(__dirname, tsConfigFile), {
+  assert(process?.env?.npm_package_json, "Expeceted npm_package_json env to be set");
+  const rootDir = path.dirname(process.env.npm_package_json);
+
+  const fileContents = fs.readFileSync(path.join(rootDir, tsConfigFile), {
     encoding: "utf8",
     flag: "r",
   });
@@ -104,8 +113,6 @@ function getConfig() {
   assert(tsConfig?.tscDualBuild?.cjs, "tsconfig.json tscDualBuild.cjs is not set");
   assert(tsConfig?.tscDualBuild?.cjs?.module, "tsconfig.json tscDualBuild.cjs.module is not set");
   assert(tsConfig?.tscDualBuild?.cjs?.outDir, "tsconfig.json tscDualBuild.cjs.outDir is not set");
-
-  assert(process.env.npm_package_json, "Expected npm_package_json env to be set");
 
   const pjFileContents = fs.readFileSync(process.env.npm_package_json, {
     encoding: "utf8",
