@@ -57,7 +57,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Kishanjay/kjn-ts-boilerplate.git"
+    "url": "https://github.com/Kishanjay/tsc-dual-build.git"
   },
   "dependencies": {
     "json5": "^2.2.3"
