@@ -1,0 +1,65 @@
+{
+  "name": "@kjn/tsc-dual-build",
+  "version": "0.0.1",
+  "description": "Quick and easy way to publish your TypeScript code as both Esmodule and CommonJS module",
+  "type": "commonjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "prepare": "husky install",
+    "prepublishOnly": "run-s clean build",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "lint:prettier": "prettier --check .",
+    "lint:prettier:fix": "prettier --write .",
+    "lint-staged": "lint-staged",
+    "build": "tsc --pretty -p tsconfig.json",
+    "semantic-release": "semantic-release"
+  },
+  "bin": {
+    "tsc-dual-build": ".dist/index.js"
+  },
+  "author": "Kishan Nirghin <kishan@itslogical.nl>",
+  "keywords": [
+    "TypeScript",
+    "ESM",
+    "CommonJS",
+    "Package",
+    "npm",
+    "publishing"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "@commitlint/cli": "^17.3.0",
+    "@commitlint/config-conventional": "^17.3.0",
+    "@semantic-release/git": "^10.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.44.0",
+    "@typescript-eslint/parser": "^5.44.0",
+    "eslint": "^8.28.0",
+    "eslint-config-prettier": "^8.5.0",
+    "husky": "^8.0.2",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.8.0",
+    "semantic-release": "^20.1.0",
+    "typescript": "^4.9.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kishanjay/kjn-ts-boilerplate.git"
+  },
+  "dependencies": {
+    "json5": "^2.2.3"
+  }
+}
