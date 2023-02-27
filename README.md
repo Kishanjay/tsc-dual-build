@@ -69,6 +69,7 @@ into something like this
   /cjs
     index.js
     package.json
+  types.d.ts
 ```
 
 The idea is that we'll create 2 seperate folders, 1 for ESM and 1 for CJS. In both these folders we'll place a _local_ package.json file that contains the configuration solely for the module syntax of the directory.
@@ -110,6 +111,9 @@ For `tsc-dual-build` to work you'd need 2 things
     "cjs": {
       "module": "commonjs",
       "outDir": "./dist/cjs"
+    },
+    "types": {
+      "outDir": "./dist"
     }
   }
 }
@@ -139,8 +143,9 @@ For the tsconfig.json above we can configure the root package.json as follows:
   // ..
   "exports": {
     "import": "./dist/esm/index.js",
-    "require": "./dist/cjs/index.js"
-  }
+    "require": "./dist/cjs/index.js",
+  },
+  "types": "./dist/index.d.ts
 }
 ```
 

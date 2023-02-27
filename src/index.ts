@@ -31,6 +31,9 @@ type DualBuildConfig = {
     module: string;
     outDir: string;
   };
+  types: {
+    outDir: string;
+  };
 };
 let [, , tsConfigFile] = process.argv;
 
@@ -51,11 +54,15 @@ async function tscDualBuild() {
   // Build CJS
   await tscBuild(config.cjs.module, config.cjs.outDir);
 
+  await tscBuildTypes(config.types.outDir);
+
   // Add local package.jsons
   compileLocalPackageJson(config.packageJson, config.esm.outDir, config.cjs.outDir);
 
   console.log(`🏁 tsc-dual-build finished`);
 }
+
+// npx
 
 function tscBuild(moduleOverride: string, outDirOverride: string) {
   return new Promise<void>((resolve, reject) => {
@@ -63,6 +70,23 @@ function tscBuild(moduleOverride: string, outDirOverride: string) {
 
     exec(
       `tsc --pretty -p tsconfig.json --module ${moduleOverride} --outDir ${outDirOverride}`,
+      (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      }
+    );
+  });
+}
+
+function tscBuildTypes(outDir: string) {
+  return new Promise<void>((resolve, reject) => {
+    console.log(`🔨 tsc-build-types\n  outDir: "${outDir}"`);
+
+    exec(
+      `tsc --pretty -p tsconfig.json --declaration true --declarationMap true --emitDeclarationOnly true --outDir ${outDir}`,
       (err) => {
         if (err) {
           reject(err);
@@ -113,6 +137,12 @@ function getConfig() {
   assert(tsConfig?.tscDualBuild?.cjs, "tsconfig.json tscDualBuild.cjs is not set");
   assert(tsConfig?.tscDualBuild?.cjs?.module, "tsconfig.json tscDualBuild.cjs.module is not set");
   assert(tsConfig?.tscDualBuild?.cjs?.outDir, "tsconfig.json tscDualBuild.cjs.outDir is not set");
+
+  assert(tsConfig?.tscDualBuild?.types, "tsconfig.json tscDualBuild.types is not set");
+  assert(
+    tsConfig?.tscDualBuild?.types?.outDir,
+    "tsconfig.json tscDualBuild.types.outDir is not set"
+  );
 
   const pjFileContents = fs.readFileSync(process.env.npm_package_json, {
     encoding: "utf8",
